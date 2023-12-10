@@ -1,10 +1,10 @@
 import { NextPage } from 'next';
-import { Box, Button, Center, Flex, Heading } from '@chakra-ui/react';
-import { FaTwitter } from 'react-icons/fa';
+import { Box, Center, Flex, Heading } from '@chakra-ui/react';
 import getConfig from 'next/config';
 import Head from 'next/head';
 import { ServiceLayout } from '@/components/containers/service_layout';
 import { useAuth } from '@/contexts/auth_user.context';
+import { GoogleLoginButton } from '@/components/google_login_button';
 
 /** 최초 진입 페이지
  *
@@ -15,7 +15,8 @@ import { useAuth } from '@/contexts/auth_user.context';
 const IndexPage: NextPage = function () {
   const { publicRuntimeConfig } = getConfig();
   const mainUrl = `https://${publicRuntimeConfig.mainDomain}`;
-  const { signInWithTwitter } = useAuth();
+  const { signInWithGoogle } = useAuth();
+
   return (
     <>
       <Head>
@@ -32,7 +33,7 @@ const IndexPage: NextPage = function () {
         <meta name="twitter:url" content={mainUrl} />
         <meta name="twitter:domain" content={publicRuntimeConfig.mainDomain} />
       </Head>
-      <ServiceLayout height="100vh" backgroundColor="gray.50">
+      <ServiceLayout title="test" height="100vh" backgroundColor="gray.50">
         <Box maxW="md" mx="auto">
           <Center marginTop="20" marginBottom="10" p="6">
             <Box>
@@ -42,35 +43,7 @@ const IndexPage: NextPage = function () {
               </Flex>
             </Box>
           </Center>
-        </Box>
-        <Box width="full" pb="10" display={{ md: 'block', base: 'none' }}>
-          <Center>
-            <Button
-              size="lg"
-              mx="6"
-              borderRadius="full"
-              leftIcon={<FaTwitter />}
-              colorScheme="twitter"
-              onClick={signInWithTwitter}
-            >
-              Twitter 계정으로 시작하기
-            </Button>
-          </Center>
-        </Box>
-        <Box position="fixed" width="full" bottom="10" pb="10" display={{ md: 'none' }}>
-          <Center>
-            <Button
-              size="lg"
-              width="full"
-              mx="6"
-              borderRadius="full"
-              leftIcon={<FaTwitter />}
-              colorScheme="twitter"
-              onClick={signInWithTwitter}
-            >
-              Twitter 계정으로 시작하기
-            </Button>
-          </Center>
+          <GoogleLoginButton onClick={signInWithGoogle} />
         </Box>
       </ServiceLayout>
     </>

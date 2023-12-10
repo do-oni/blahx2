@@ -14,7 +14,7 @@ import {
 import { useAuth } from '@/contexts/auth_user.context';
 
 const GNB: React.FC = function () {
-  const { loading, authUser, signOut } = useAuth();
+  const { loading, authUser, signOut, signInWithGoogle } = useAuth();
 
   const loginBtn = (
     <Button
@@ -25,13 +25,12 @@ const GNB: React.FC = function () {
       _hover={{
         bg: 'pink.300',
       }}
-      onClick={() => {
-        window.location.href = '/login';
-      }}
+      onClick={signInWithGoogle}
     >
       로그인
     </Button>
   );
+
   const logoutBtn = (
     <Menu>
       <MenuButton
@@ -51,6 +50,7 @@ const GNB: React.FC = function () {
       </MenuList>
     </Menu>
   );
+
   const authInitialized = loading || authUser === null;
 
   return (
@@ -69,12 +69,12 @@ const GNB: React.FC = function () {
         maxW="md"
         mx="auto"
       >
+        {/* Spacer: 빈 공간 채우기 */}
         <Spacer />
         <Box flex={{ base: 1 }}>
           <img style={{ height: '40px' }} src="/logo.svg" alt="logo" />
         </Box>
-
-        <Box justify="flex-end">{authInitialized ? loginBtn : logoutBtn}</Box>
+        <Box>{authInitialized ? loginBtn : logoutBtn}</Box>
       </Flex>
     </Box>
   );

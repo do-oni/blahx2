@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 
 import OAuth from 'oauth';
 import { promisify } from 'util';
-import FirebaseAdmin from '@/models/firebase_admin';
+import FirebaseAdmin from '@/models/auth/firebase_admin';
 
 const TWITTER_CONSUMER_KEY = process.env.TWITTER_CONSUMER_KEY ?? '';
 const TWITTER_CONSUMER_SECRET = process.env.TWITTER_CONSUMER_SECRET ?? '';

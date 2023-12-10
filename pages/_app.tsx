@@ -8,9 +8,11 @@ import { AuthUserProvider } from '@/contexts/auth_user.context';
 
 const MyApp = function ({ Component, pageProps }: AppProps) {
   const queryClientRef = React.useRef<QueryClient>();
+
   if (!queryClientRef.current) {
     queryClientRef.current = new QueryClient();
   }
+
   return (
     <QueryClientProvider client={queryClientRef.current}>
       <ChakraProvider>

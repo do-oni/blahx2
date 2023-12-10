@@ -2,5 +2,8 @@
     "editor.codeActionsOnSave": {
         "source.fixAll": true
     },
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
+    "editor.foldingImportsByDefault": true,
+    "autoimport.doubleQuotes": true,
+    "editor.definitionLinkOpensInPeek": true
 }

@@ -3,7 +3,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import handleError from '@/controllers/handle_error';
 
-import MessageCtrl from '@/controllers/message/message.controller';
+import MessageCtrl from '@/controllers/message/message.ctrl';
 import checkSupportMethod from '@/controllers/check_support_method';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

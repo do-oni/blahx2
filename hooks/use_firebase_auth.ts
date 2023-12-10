@@ -1,6 +1,6 @@
 import { User, GoogleAuthProvider, TwitterAuthProvider, signInWithPopup } from 'firebase/auth';
 import { useState, useEffect } from 'react';
-import FirebaseAuthClient from '@/models/auth/firebase_auth_client';
+import FirebaseClient from '@/models/auth/firebase_client';
 import { InAuthUser } from './interface/in_auth_user';
 import { memberAddForClient } from '@/models/member/member.client.service';
 
@@ -38,7 +38,7 @@ export default function useFirebaseAuth() {
   };
 
   // const getRedirectResultPostProcess = async () => {
-  //   const result = await getRedirectResult(FirebaseAuthClient.getInstance().Auth);
+  //   const result = await getRedirectResult(FirebaseClient.getInstance().Auth);
   //   console.info({ getRedirectResultPostProcess: result });
   //   if (result && result.providerId === 'twitter.com') {
   //     const credential = TwitterAuthProvider.credentialFromResult(result);
@@ -53,10 +53,25 @@ export default function useFirebaseAuth() {
   async function signInWithGoogle(): Promise<void> {
     const provider = new GoogleAuthProvider();
     try {
-      const signInResult = await signInWithPopup(FirebaseAuthClient.getInstance().Auth, provider);
+      const signInResult = await signInWithPopup(FirebaseClient.getInstance().Auth, provider);
 
       if (signInResult.user) {
-        console.log(signInResult.user);
+        console.info(signInResult.user);
+        const res = await fetch('/api/members.add', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            uid: signInResult.user.uid,
+            email: signInResult.user.email,
+            displayName: signInResult.user.displayName,
+            photoURL: signInResult.user.photoURL,
+          }),
+        });
+        console.info({ status: res.status });
+        const resData = await res.json();
+        console.info(resData);
         // const idToken = await signInResult.user.getIdToken();
         // const findResp = await memberFind({ member_id: signInResult.user.uid, isServer: false });
         // if (!(findResp.status === 200 && findResp.payload && findResp.payload.uid === signInResult.user.uid)) {
@@ -82,7 +97,7 @@ export default function useFirebaseAuth() {
   async function signInWithTwitter(): Promise<void> {
     const provider = new TwitterAuthProvider();
     try {
-      const signInResult = await signInWithPopup(FirebaseAuthClient.getInstance().Auth, provider);
+      const signInResult = await signInWithPopup(FirebaseClient.getInstance().Auth, provider);
       if (signInResult.user) {
         const credential = TwitterAuthProvider.credentialFromResult(signInResult);
         if (credential === null) {
@@ -122,12 +137,12 @@ export default function useFirebaseAuth() {
     }
   }
 
-  const signOut = () => FirebaseAuthClient.getInstance().Auth.signOut().then(clear);
+  const signOut = () => FirebaseClient.getInstance().Auth.signOut().then(clear);
 
   useEffect(() => {
     console.log('useEffect');
     // listen for Firebase state change
-    const unsubscribe = FirebaseAuthClient.getInstance().Auth.onAuthStateChanged(authStateChanged);
+    const unsubscribe = FirebaseClient.getInstance().Auth.onAuthStateChanged(authStateChanged);
     // getRedirectResultPostProcess();
 
     // unsubscribe to the listener when unmounting
