@@ -1,4 +1,4 @@
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import {
   Avatar,
   Box,
@@ -15,7 +15,7 @@ import {
 import { TriangleDownIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import { useQuery } from 'react-query';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import ResizeTextarea from 'react-textarea-autosize';
 import Head from 'next/head';
 import getConfig from 'next/config';
@@ -311,6 +311,50 @@ const UserHomePage: NextPage<Props> = function ({ userInfo, screenName }) {
       </ServiceLayout>
     </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps<Props> = async ({ query }) => {
+  const { screenName } = query;
+  if (!screenName) {
+    return {
+      props: {
+        userInfo: null,
+        screenName: '',
+      },
+    };
+  }
+  try {
+    const protocol = process.env.PROTOCOL || 'http';
+    const host = process.env.HOST || 'localhost';
+    const port = process.env.PORT || '3000';
+    const baseUrl = `${protocol}://${host}:${port}`;
+    const userInfo: AxiosResponse<InAuthUser> = await axios(`${baseUrl}/api/users.info/${screenName}`);
+    const screenNameToStr = Array.isArray(screenName) ? screenName[0] : screenName;
+
+    if (userInfo.status !== 200 || !userInfo.data || !userInfo.data.uid) {
+      return {
+        props: {
+          userInfo: null,
+          screenName: '',
+        },
+      };
+    }
+
+    return {
+      props: {
+        userInfo: userInfo.data,
+        screenName: screenNameToStr,
+      },
+    };
+  } catch (err) {
+    console.error(err);
+    return {
+      props: {
+        userInfo: null,
+        screenName: '',
+      },
+    };
+  }
 };
 
 export default UserHomePage;
