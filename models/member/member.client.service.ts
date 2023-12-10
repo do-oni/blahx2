@@ -32,7 +32,6 @@ async function memberFindByScreenNameForClient(args: {
   const { isServer } = args;
   const hostAndPort: string = getBaseUrl(isServer);
   const url = `${hostAndPort}/api/users.info/${args.screenName}`;
-  console.log(url);
   try {
     const resp = await requester<InMemberInfo | null>({
       option: {

@@ -45,7 +45,6 @@ export default class FirebaseAdmin {
       databaseURL: config.databaseurl,
       credential: admin.credential.cert(config.credential),
     });
-    console.log('bootstrap end');
   }
 
   /** firestore를 반환 */

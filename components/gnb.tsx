@@ -41,7 +41,7 @@ const GNB: React.FC = function () {
       <MenuList>
         <MenuItem
           onClick={() => {
-            window.location.href = `/${authUser?.screenName ?? ''}`;
+            window.location.href = `/${authUser?.email?.replace('@gmail.com', '')}`;
           }}
         >
           사용자 홈으로 이동

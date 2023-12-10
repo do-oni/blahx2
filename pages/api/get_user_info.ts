@@ -19,13 +19,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   );
   const get = promisify(oauth.get.bind(oauth));
   try {
-    const { token, secret, uid } = req.body;
-    console.info({ token, secret, uid });
     const url = `https://api.twitter.com/2/users/${req.body.uid}`;
-    console.info(url);
     const result = await get(url, req.body.token, req.body.secret);
-    console.info(result);
-    console.log(typeof result === 'string');
     if (typeof result === 'string') {
       await FirebaseAdmin.getInstance().Firestore.collection('test').add(JSON.parse(result));
     }

@@ -20,11 +20,9 @@ export default class FirebaseClient {
     const apps = getApps();
 
     if (!apps.length) {
-      console.info('firebase client init started');
       initializeApp(FirebaseCredentials);
     }
     this.auth = getAuth();
-    console.info('firebase auth');
   }
 
   public static getInstance(): FirebaseClient {

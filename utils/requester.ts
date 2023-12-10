@@ -13,7 +13,6 @@ export interface Resp<P> {
 export async function requester<Payload>({ option }: { option: AxiosRequestConfig }): Promise<Resp<Payload>> {
   try {
     const result: AxiosResponse<Payload> = await axios(option);
-    console.log({ status: result.status, reqUrl: result.config.url });
     return {
       status: result.status,
       payload: result.data,
