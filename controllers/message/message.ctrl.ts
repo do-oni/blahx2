@@ -3,8 +3,16 @@ import MessageModel from '@/models/message/message.model';
 import BadReqError from '../custom_error/bad_req_error';
 import CustomServerError from '../custom_error/custom_server_error';
 import FirebaseAdmin from '../../models/auth/firebase_admin';
+import validateParamWithData from '../req_validator';
+import JSCPostMessageReq from './JSONSchema/JSCPostMessageReq';
 
 async function post(req: NextApiRequest, res: NextApiResponse) {
+  const valid = validateParamWithData({ body: req.body }, JSCPostMessageReq);
+
+  if (!valid.result) {
+    throw new BadReqError('잘못된 요청');
+  }
+
   const { uid, message, author } = req.body;
 
   if (!uid) {
